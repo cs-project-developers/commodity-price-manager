@@ -64,9 +64,15 @@ Python libraries used:
 
 ## How to run the project:
 before you run the project you must have installed in you device.
-T do that open your terminal or command promt (f you are a windows user) and paste the below command first:
+To do that open your terminal or command promt (if you are a windows user) and paste the below command first:<br>
 ```pip install -r requirements.txt```
-
+<br>
+If the installation is completed you are now ready to run the project.
+To run the project paste  the commands in your terminal: <br>
+for linux or mac use: <br>
+```python3 GUI.py```<br>
+For windows use : <br>
+```python GUI.py```
 
 ## Hardware requirements:
 - x86 64-bit CPU (Intel / AMD architecture)
