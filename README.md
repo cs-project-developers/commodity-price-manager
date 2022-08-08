@@ -63,6 +63,9 @@ Python libraries used:
 - Geopy
 
 ## How to run the project:
+before you run the project you must have installed in you device.
+T do that open your terminal or command promt (f you are a windows user) and paste the below command first:
+```pip install -r requirements.txt```
 
 
 ## Hardware requirements:
