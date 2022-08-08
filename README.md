@@ -1,8 +1,7 @@
 # commodity-price-manager
 ## A tool for farmers to get way more profit via our project.
 This is a project for our class 12 board activity.
-Commodities Price Manager
-
+<br>
 
 ## Agenda :
 - What's our project about 
