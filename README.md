@@ -68,9 +68,9 @@ To do that open your terminal or command promt (if you are a windows user) and p
 <br>
 If the installation is completed you are now ready to run the project.
 To run the project paste  the commands in your terminal: <br>
-for linux or mac use: <br>
+for linux or mac user: <br>
 ```python3 GUI.py```<br>
-For windows use : <br>
+For windows user : <br>
 ```python GUI.py```
 
 ## Hardware requirements:
