@@ -105,8 +105,6 @@ def resulting_window():
 
 
 
-
-
 def main_window():
     global coms_combobox,cal_box,innerWindow,date_label
     innerWindow = ctk.CTkFrame(window,width=300,height=200,corner_radius=10)
