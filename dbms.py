@@ -53,7 +53,7 @@ def insertData(data):
     variety = data["variety"]
     con=establishCon()
     cur=con.cursor()
-    cur.execute(f'INSERT INTO cpm_data VALUES("{date}", "{commodity}", "{district}", "{market}", {max_price}, {min_price}, {modal_price}, "{state}", "{variety}")')
+    cur.execute(f'INSERT INTO cpm_data VALUES("{date}", "{commodity}", "{district}", "{market}", {float(max_price)}, {min_price}, {modal_price}, "{state}", "{variety}")')
     con.commit()
     con.close()
 
@@ -73,6 +73,14 @@ def getParticularData(commodity, date = today_):
     cur.execute(f'select * from cpm_data where commodity = "{commodity}" and arrival_date = "{date}"')
     result_set = cur.fetchall()
     return result_set
+
+def get_max_price_cmd(date, commodity):
+    con = establishCon()
+    cur = con.cursor()
+    command = f'select max_price , market from cpm_data where commodity="{commodity}" and arrival_date="{date}"order by max_price desc limit 1'
+    cur.execute(command)
+    result = cur.fetchall()
+    return result[0]
 
 
 def save_comodity_name():
