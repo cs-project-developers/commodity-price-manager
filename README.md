@@ -69,7 +69,9 @@ To do that open your terminal or command promt (if you are a windows user) and p
 or
 <br>
 just run the setup.py  from the setup folder.
+<br>
 For windows
+<br>
 ```python setup.py```
 <br>
 For linux
@@ -96,7 +98,7 @@ For windows use : <br>
 - Tkintermapview 1.13
 - requests 2.28.1
 - fpdf 1.7.2
-- Tkinter
+- customTkinter 4.6.3
 - geopy 2.2.0
 
 ## Conclusion :
