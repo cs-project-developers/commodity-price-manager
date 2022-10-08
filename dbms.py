@@ -13,8 +13,9 @@ def establishCon():
     con = mc.connect(host="localhost",user=user,password=pswd, database="cpm")
     return con
 
-def checkCon(connection):
+def checkCon():
     try:
+        connection = mc.connect(host="localhost",user=user,password=pswd, database="cpm")
         if connection.is_connected():
             createTable()
             return True
@@ -24,7 +25,7 @@ def checkCon(connection):
         con = mc.connect(host="localhost",user=user,password=pswd)
         cur=con.cursor()
         cur.execute("create database cpm")
-        cur.commit()
+        con.commit()
         con.close()
         establishCon()
         createTable()
@@ -123,5 +124,5 @@ def load_pickle_data():
     output.sort()
     return output
 
-checkCon(establishCon())
+checkCon()
 
