@@ -102,8 +102,10 @@ For windows use : <br>
 - geopy 2.2.0
 
 ## Flow chart of our project
-<br>
+
+
 ```mermaid
+
 graph TD
 A[START] -->B(GET CREDENTIALS)
 B --> C{IF INPUTED CREDENTILSGET CONNECTED IN MYSQL SERVER}
@@ -128,8 +130,9 @@ CHAVIEW --> NORVIEW{IF NORMAL VIEW BUTTON PRESSED}  --> NOR(CHANGE TILE SERVER F
 N --> GET(GET SHORTEST DISTANCE MARKET) --> DISS(DISPLAY THE SHORTEST DISTANCE MARKET TO THE USER)
 N --> GETPRICE(GET MAXIMUM FIXED PRICE FOR THE SELECTED COMMODITY) --> SHOWPRICE(DISPLAY THE DISTANCE , MARKET NAME AND PRICE FOR THE MAXIMUM PRICE FIXED FOR THE COMMODITY THAT MARKET)
 CHECKSELECTION --> |NOT SELECETED| SHOER(SHOW NO DATA SELECTED AS ERROR)
+
 ```
-<br>
+
 
 ## Conclusion :
 In conclusion we can say that this project is fully based on helping the Indian farmers to get more profit by selling the commodity they have to the market which offers high prices .
