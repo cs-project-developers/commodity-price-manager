@@ -6,7 +6,6 @@ class AutoUpdate():
     
     def __init__(self,date):
         self.date = date
-        self.buffer_data = db.getDbData()
         self.miner_data = md.mined_data()
     def check_date(self,date):
         try:
@@ -53,6 +52,4 @@ class AutoUpdate():
                 except:
                     pass
             
-     
-AutoUpdate("04/10/2022").insert_data_not_in_db()
 
