@@ -11,6 +11,16 @@ import webbrowser
 from PIL import Image, ImageTk
 from tkinter.filedialog import asksaveasfile
 import pdf_file
+import requests
+from pprint import pprint
+today_ = str(date.today())
+month_ = today_.split("-")[1]
+date_ = today_.split("-")[2]
+year_ =today_.split("-")[0]
+today_ = date_+"/"+month_+"/"+year_
+updater.AutoUpdate(today_).insert_data_not_in_db()
+db.save_comodity_name()      
+coms_name_list = db.load_pickle_data()
 ctk.set_appearance_mode("dark")  
 ctk.set_default_color_theme("dark-blue")
 window = ctk.CTk()
@@ -19,19 +29,28 @@ window.state("zoomed")
 window.iconbitmap("resources/favicon.ico")
 hdg_label = tk.Label(window,text="Commodities Price Manager",bg="#1c1a1a",fg="white",font=("helvetica", 30))
 hdg_label.pack(padx=20, pady=20)
-today_ = str(date.today())
-month_ = today_.split("-")[1]
-date_ = today_.split("-")[2]
-year_ =today_.split("-")[0]
-today_ = date_+"/"+month_+"/"+year_
-updater.AutoUpdate(today_).insert_data_not_in_db()
-db.save_comodity_name()
-                
-coms_name_list = db.load_pickle_data()
+
+
 
 def open_click():
-    url = f"https://www.google.com/maps/dir/{geo.user_current_location[0]},{geo.user_current_location[1]}/{loc}/"
-    webbrowser.open(url, new=2)
+    global map_widget
+    #url = f"https://www.google.com/maps/dir/{geo.user_current_location[0]},{geo.user_current_location[1]}/{loc}/"
+    #webbrowser.open(url, new=2)
+    start_long = tuple(geo.user_current_location)
+    stop_long = tuple(geo.get_long_lat(loc))
+    url =f"https://bhuvan-app1.nrsc.gov.in/api/routing/curl_routing_state.php?lat1={start_long[0]}&lon1={start_long[1]}&lat2={stop_long[0]}&lon2={stop_long[1]}&token=139d7fad99dcfda7aa7183d0e5f48166f0849ffa"
+    print(url)
+    data = requests.get(url)
+    data = data.json()
+    data = data["features"][0]["geometry"]["coordinates"]
+    cord_list = []
+    for i in data:
+        for j in i:
+            cord = tuple(j)
+            cor1 ,cor2 = cord[1],cord[0]
+            cord = (cor1,cor2)
+            cord_list.append(cord)
+    map_widget.set_path(cord_list)
     dir_pop.destroy()
 
 def direction():
@@ -283,5 +302,4 @@ def main_window():
     get_suggestion_btn = ctk.CTkButton(master=innerWindow, text="GET SUGGESTION",command=get_suggestion_data,image=sugest_img,compound="top",height=80,hover_color="gray25")
     get_suggestion_btn.pack(padx=20,pady=20)
     window.mainloop()
-
 
