@@ -359,5 +359,3 @@ def main_window():
     get_suggestion_btn.pack(padx=20,pady=20)
     
     window.mainloop()
-
-
