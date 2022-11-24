@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkvideo import tkvideo
 import customtkinter as ctk
 from tkinter import ttk
 from PIL import Image, ImageTk
@@ -7,6 +8,7 @@ ctk.set_default_color_theme("dark-blue")
 import dbms as db
 from datetime import date
 import time
+import pickle
 import autoUpdate as updater
 import geologic as geo
 import tkintermapview
@@ -26,7 +28,10 @@ window = ctk.CTk()
 window.withdraw()
 
 def start_fn():
-    global coms_name_list
+    global coms_name_list, bhuvan_token
+    bhuvan = open("secure/bhuvanToken.dat","rb")
+    bhuvan_token = pickle.load(bhuvan)
+    bhuvan.close()
     updater.AutoUpdate(today_).insert_data_not_in_db()
     db.save_comodity_name()     
     coms_name_list = db.load_pickle_data()
@@ -35,8 +40,15 @@ t = Thread(target=start_fn, daemon=True)
 t.start()
 
 loading_screen = ctk.CTkToplevel(window)
-
-loading_screen.geometry("600x500")
+loading_screen.wm_overrideredirect(True)
+w = 600
+h = 500
+sw = loading_screen.winfo_screenwidth()
+sh = loading_screen.winfo_screenheight() 
+x = int((sw/2) - (w/2))
+y = int((sh/2) - (h/2))
+loading_screen.geometry(f"{w}x{h}+{x}+{y}")
+loading_screen.title('CPM LOADING....')
 loading_screen.update()
 beck_img = ImageTk.PhotoImage(Image.open("resources/bg.jpg").resize((600,500)))
 loading_label = ctk.CTkLabel(loading_screen, text="",image=beck_img)
@@ -66,17 +78,24 @@ window.state("zoomed")
 window.iconbitmap("resources/favicon.ico")
 hdg_label = tk.Label(window,text="Commodities Price Manager",bg="#1c1a1a",fg="white",font=("helvetica", 30))
 hdg_label.pack(padx=20, pady=20)
+
 window.deiconify()
 window.focus_force()
 
 def open_click():
     global map_widget
-    #url = f"https://www.google.com/maps/dir/{geo.user_current_location[0]},{geo.user_current_location[1]}/{loc}/"
-    #webbrowser.open(url, new=2)
     start_long = tuple(geo.user_current_location)
-    stop_long = tuple(geo.get_long_lat(loc))
-    url =f"https://bhuvan-app1.nrsc.gov.in/api/routing/curl_routing_state.php?lat1={start_long[0]}&lon1={start_long[1]}&lat2={stop_long[0]}&lon2={stop_long[1]}&token=8a55adb3e209608262a30e4fe572441706b1a607"
-    print(url)
+    try:
+        stop_long = tuple(geo.get_long_lat(loc))
+    except TypeError:
+        msg = ctk.CTkToplevel(window)
+        label = ctk.CTkLabel(msg,text="oops the requested place is not found try with other place :(")
+        label.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
+        def df():
+            msg.destroy()
+        close_btn = ctk.CTkButton(master=msg,text="close",command=df)
+        close_btn.pack(padx=10,pady=10)
+    url =f"https://bhuvan-app1.nrsc.gov.in/api/routing/curl_routing_state.php?lat1={start_long[0]}&lon1={start_long[1]}&lat2={stop_long[0]}&lon2={stop_long[1]}&token={bhuvan_token}"
     data = requests.get(url)
     data = data.json()
     data = data["features"][0]["geometry"]["coordinates"]
@@ -87,10 +106,8 @@ def open_click():
             cor1 ,cor2 = cord[1],cord[0]
             cord = (cor1,cor2)
             cord_list.append(cord)
-    pprint(cord_list)
     map_widget.set_marker(start_long[0],start_long[1])
     map_widget.set_path(cord_list)
-    print("ok")
     dir_pop.destroy()
 
 def direction():
@@ -134,7 +151,6 @@ def empty():
     label.pack(padx=10, pady=10)
     button = ctk.CTkButton(master = framing, text="OK", command=ok_press)
     button.pack(padx=10, pady=10)
-
 
 
 def map_view():
@@ -259,7 +275,7 @@ def shortest_result(location,price,pri_location, pri_dist):
     short_frame.pack(padx=5, pady=5)
     short_label = tk.Label(short_frame, text=f"The nearest market is {location[0]} with distance {location[1]}",bg="#292929",fg="white",font=("helvetica", 15),wraplength=650)
     short_label.pack(padx=5,pady=5)
-    max_profit_label = tk.Label(short_frame,text=f"The market {pri_location} has the maximim price of {price} for your commodity is of  distance {pri_dist} km away from your current location.",bg="#292929",fg="white",font=("helvetica", 15),wraplength=650,height=400)
+    max_profit_label = tk.Label(short_frame,text=f"The market {pri_location} has the maximim price of {round(price,2)} for your commodity is of  distance {round(pri_dist,2)} km away from your current location.",bg="#292929",fg="white",font=("helvetica", 15),wraplength=650,height=400)
     max_profit_label.pack(padx=5,pady=5)
 
 
@@ -344,3 +360,4 @@ def main_window():
     
     window.mainloop()
 
+main_window()
