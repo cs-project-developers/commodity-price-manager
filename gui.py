@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkvideo import tkvideo
 import customtkinter as ctk
 from tkinter import ttk
 from PIL import Image, ImageTk
@@ -359,3 +358,5 @@ def main_window():
     get_suggestion_btn.pack(padx=20,pady=20)
     
     window.mainloop()
+
+main_window()
