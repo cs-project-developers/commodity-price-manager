@@ -39,5 +39,8 @@ def commodity_name_list():
         return coms_data
 
 
+def get_dates_available():
+        data = mined_data()
+        date = data[0]["arrival_date"]
+        return date
 
-#################test case statement

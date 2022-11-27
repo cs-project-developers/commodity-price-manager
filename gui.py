@@ -1,10 +1,12 @@
 import tkinter as tk
+from tkvideo import tkvideo
 import customtkinter as ctk
 from tkinter import ttk
 from PIL import Image, ImageTk
 ctk.set_appearance_mode("dark")  
 ctk.set_default_color_theme("dark-blue")
 import dbms as db
+import MandiData
 from datetime import date
 import time
 import pickle
@@ -25,6 +27,18 @@ year_ =today_.split("-")[0]
 today_ = date_+"/"+month_+"/"+year_
 window = ctk.CTk()
 window.withdraw()
+data_date = MandiData.get_dates_available()
+
+def abt():
+    abt_win = ctk.CTkToplevel(window)
+    abt_win.title("cpm help window")
+    frame_abt = ctk.CTkFrame(abt_win)
+    frame_abt.pack(padx=10,pady=10)
+    #video_label = tk.Label(frame_abt)
+    #video_label.pack(padx=10,pady=10)
+    #player = tkvideo("resources\cpm.mp4",video_label , loop = 0, size = (720,460))
+    #player.play()
+    labell = tk.Label(frame_abt, text="This application was made by Rakesh, Pratyush,Sriram using python for frontend and we used mysql for backend", bg="#292929", fg="white").pack(side=tk.BOTTOM,padx=10,pady=10)
 
 def start_fn():
     global coms_name_list, bhuvan_token
@@ -75,6 +89,8 @@ loading_screen.destroy()
 window.title("Commodity price manager")
 window.state("zoomed")
 window.iconbitmap("resources/favicon.ico")
+abt = ctk.CTkButton(window,text="About !",command=abt)
+abt.place(x=(sw-155),y=10)
 hdg_label = tk.Label(window,text="Commodities Price Manager",bg="#1c1a1a",fg="white",font=("helvetica", 30))
 hdg_label.pack(padx=20, pady=20)
 
@@ -94,20 +110,32 @@ def open_click():
             msg.destroy()
         close_btn = ctk.CTkButton(master=msg,text="close",command=df)
         close_btn.pack(padx=10,pady=10)
-    url =f"https://bhuvan-app1.nrsc.gov.in/api/routing/curl_routing_state.php?lat1={start_long[0]}&lon1={start_long[1]}&lat2={stop_long[0]}&lon2={stop_long[1]}&token={bhuvan_token}"
+    url =f"https://bhuvan-app1.nrsc.gov.in/api/routing/curl_routing_state.php?lat1={round(start_long[0],2)}&lon1={round(start_long[1],2)}&lat2={round(stop_long[0],2)}&lon2={round(stop_long[1],2)}&token={bhuvan_token}"
     data = requests.get(url)
-    data = data.json()
-    data = data["features"][0]["geometry"]["coordinates"]
-    cord_list = []
-    for i in data:
-        for j in i:
-            cord = tuple(j)
-            cor1 ,cor2 = cord[1],cord[0]
-            cord = (cor1,cor2)
-            cord_list.append(cord)
-    map_widget.set_marker(start_long[0],start_long[1])
-    map_widget.set_path(cord_list)
-    dir_pop.destroy()
+    try:
+        data = data.json()
+        data = data["features"][0]["geometry"]["coordinates"]
+        cord_list = []
+        for i in data:
+            for j in i:
+                cord = tuple(j)
+                cor1 ,cor2 = cord[1],cord[0]
+                cord = (cor1,cor2)
+                cord_list.append(cord)
+        map_widget.set_marker(start_long[0],start_long[1])
+        map_widget.set_path(cord_list)
+        dir_pop.destroy()
+    except:
+        def clos():
+            map_Err.destroy()
+        map_Err = ctk.CTkToplevel(window)
+        map_Err.title("directional error")
+        frame = ctk.CTkFrame(map_Err)
+        frame.pack()
+        labe = tk.Label(frame,text="OOps currently we can give direction to only within same state :(",bg="#292929",fg="white",font=("helvetica", 15))
+        labe.pack(padx=10,pady=10)
+        closing = ctk.CTkButton(master=frame,text="close",command=clos)
+        closing.pack(padx=10,pady=10)
 
 def direction():
     global dir_pop
@@ -329,14 +357,14 @@ def main_to_result_window():
     progress.pack(padx=100,pady=100)
     progress.set(0)
     bar(progress,secondary_inner_window,0)
-    result_set = db.getParticularData(cpms_name_data, today_)
+    result_set = db.getParticularData(cpms_name_data, data_date)
     if result_set == []:
         no_data()
     locations_list = []
     for i in result_set:
         locations_list.append(i[3])
     short_dist = geo.generate_shortest_dist(locations_list)
-    max_result = db.get_max_price_cmd(today_,cpms_name_data)
+    max_result = db.get_max_price_cmd(data_date,cpms_name_data)
     max_price = max_result[0]
     max_mar = max_result[1]
     max_dist = geo.get_distance(geo.user_current_location,geo.get_long_lat(max_mar))
@@ -358,5 +386,3 @@ def main_window():
     get_suggestion_btn.pack(padx=20,pady=20)
     
     window.mainloop()
-
-main_window()

@@ -83,7 +83,8 @@ def getDbData():
 def getParticularData(commodity, date = today_):
     con = establishCon()
     cur = con.cursor()
-    cur.execute(f'select * from cpm_data where commodity = "{commodity}" and arrival_date = "{date}"')
+    com = f'select * from cpm_data where commodity = "{commodity}" and arrival_date = "{date}"'
+    cur.execute(com)
     result_set = cur.fetchall()
     return result_set
 
@@ -134,4 +135,3 @@ def load_pickle_data():
     return output
 
 checkCon()
-
