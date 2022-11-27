@@ -10,11 +10,11 @@ import requests
 url = "https://youtu.be/dQw4w9WgXcQ"
 timeout = 5
 
-lab = Label(root, text = "please wait untill setup finishes").pack(padx=10,pady=10)
+lab = tk.Label(root, text = "please wait untill setup finishes")
+lab.pack(padx=10,pady=10)
 def setup_fn():
     global lab
     os.system("pip install geopy")
-    lab.config(text="installed geopy")
     os.system("pip install customtkinter")
     os.system("pip install tkintermapview")
     os.system("pip install cachetools")
