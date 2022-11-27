@@ -18,7 +18,7 @@ def setup_fn():
     os.system("pip install cachetools")
     os.system("pip install mysql-connector-python")
     os.system("pip install fpdf2")
-    os.system("pip install tkVideo")
+    os.system("pip install tkvideo")
     time.sleep(3)
     root.destroy()
 
