@@ -48,11 +48,6 @@ def show_pswd():
         pass_entry.configure(show="#")
         show_pass.configure(image=open_eye)
 
-
-
-
-
-
 def call_auth():
     global pass_entry, user_entry
     auth_ = auth.auth(user_entry,pass_entry)
@@ -116,7 +111,6 @@ def visit():
     url = "https://bhuvan-app1.nrsc.gov.in/api/#"
     webbrowser.open(url, new=2)
     
-
 help_btn = ctk.CTkButton(master=auth_window,text="help?",command=help,hover_color="purple",width=30)
 help_btn.place(x=290,y=5)#pack(padx=10,pady=10,side=tk.RIGHT)
 pswd_state = False
